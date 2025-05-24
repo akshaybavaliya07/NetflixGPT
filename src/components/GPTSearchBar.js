@@ -16,24 +16,28 @@ const GPTSearchBar = () => {
     return json.results;
   }
   const handleGPTSearchClick = async () => {
-    const gptQuery = 'Act as a Movies Recommendation System and suggest some movies for Query: '+ searchText.current.value + '. Only give me name of 5 movies comma separeted like the Example result given ahead. Exaple result: Koi Mil Gaya, Leo, Don, Shanak, Hera Pheri'
+    const movieName = searchText.current.value;
+    // const gptQuery = 'Act as a Movies Recommendation System and suggest some movies for Query: '+ searchText.current.value + '. Only give me name of 5 movies comma separeted like the Example result given ahead. Exaple result: Koi Mil Gaya, Leo, Don, Shanak, Hera Pheri'
 
-    const gptResults = await openAI.chat.completions.create({
-      messages: [{ role: 'user', content: gptQuery }],
-      model: 'gpt-3.5-turbo',
-    });
+    // const gptResults = await openAI.chat.completions.create({
+    //   messages: [{ role: 'user', content: gptQuery }],
+    //   model: 'gpt-3.5-turbo',
+    // });
 
-    // gptResults?.choices?.[0].message?.content;  //will returns = Koi Mil Gaya, Leo, Don, Shanak, Hera Pheri
-    const gptMovies = gptResults?.choices?.[0].message?.content.split(',');
-    // ['Koi Mil Gaya', 'Leo', 'Don', 'Shanak', 'Hera Pheri']
-    // Now for all movies search in TMDB API
+    // // gptResults?.choices?.[0].message?.content;  //will returns = Koi Mil Gaya, Leo, Don, Shanak, Hera Pheri
+    // const gptMovies = gptResults?.choices?.[0].message?.content.split(',');
+    // // ['Koi Mil Gaya', 'Leo', 'Don', 'Shanak', 'Hera Pheri']
+    // // Now for all movies search in TMDB API
 
-    const promiseArray = gptMovies.map(movie => searchTMDBmovie(movie));
-    // [Promise, Promise, Promise, Promise, Promise]
+    // const gptMovies = ['Sanak', 'Attack', 'Shershaah','Hera Pheri', 'Don'];   // hardCoded becuse of OPENAI api takes charges for an each api call
 
-    const tmdbResults = await Promise.all(promiseArray);
+    // const promiseArray = gptMovies.map(movie => searchTMDBmovie(movie));
+    // // [Promise, Promise, Promise, Promise, Promise]
 
-    dispatch(addGptMovieResults({movieNames: gptMovies, movieResults: tmdbResults}));
+    // const tmdbResults = await Promise.all(promiseArray);
+    const tmdbResults = await searchTMDBmovie(movieName);
+
+    dispatch(addGptMovieResults({movieNames: movieName, movieResults: tmdbResults}));
   }
 
   return (
@@ -43,10 +47,10 @@ const GPTSearchBar = () => {
           ref={searchText}
           className='p-2 m-3 col-span-9 rounded-md' 
           placeholder={LANGUAGE_TEXT[language].gptSearchPlaceholder} 
-          onClick={handleGPTSearchClick}
         />
         <button 
-          className='py-2 px-4 m-3 col-span-3 bg-red-700 text-white rounded-md'>
+          className='py-2 px-4 m-3 col-span-3 bg-red-700 text-white rounded-md'
+          onClick={handleGPTSearchClick} >
           {LANGUAGE_TEXT[language].Search}
         </button>
       </form>

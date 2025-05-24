@@ -59,7 +59,7 @@ const Header = () => {
           <button 
             className='bg-green-600 text-white rounded-md py-2 px-4 mt-4 mr-2 hover:bg-green-400' 
             onClick={handleGptSearchClick}>
-              { showGPTSearch ? 'Home' : 'GPT Search'}
+              { showGPTSearch ? 'Home' : 'Search'}
             </button>
           { showGPTSearch && 
             <select className='bg-gray-700 text-white rounded-md m-4 py-2 px-4' onChange={handleLanguageChange}>
